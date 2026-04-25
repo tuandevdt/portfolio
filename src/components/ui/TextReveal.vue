@@ -66,7 +66,7 @@ onMounted(() => {
         ease: 'power3.out',
         delay: props.delay,
       })
-      trigger?.disconnect()
+      trigger?.kill()
     }
   })
 })
