@@ -6,7 +6,7 @@
           <div class="space-y-5">
             <span class="eyebrow">{{ siteContent.hero.eyebrow }}</span>
             <span class="editorial-label">{{ siteContent.contact.availability }}</span>
-            <TextReveal tag="h1" class="display-title text-gradient max-w-5xl text-white" :text="siteContent.hero.title" />
+            <h1 class="display-title text-gradient max-w-5xl text-white">{{ siteContent.hero.title }}</h1>
             <p class="max-w-2xl text-lg font-semibold text-slate-200 md:text-xl">
               {{ siteContent.hero.summary }}
             </p>
@@ -70,7 +70,6 @@
 <script setup lang="ts">
 import heroArtwork from '../../assets/hero.png'
 import AnimateOnScroll from '../common/AnimateOnScroll.vue'
-import TextReveal from '../ui/TextReveal.vue'
 import ParallaxElement from '../ui/ParallaxElement.vue'
 import SpotlightCard from '../ui/SpotlightCard.vue'
 import { siteContent } from '../../content/siteContent'
