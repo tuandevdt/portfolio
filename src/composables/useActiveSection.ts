@@ -3,31 +3,44 @@ import { ref, onMounted, onUnmounted, type Ref } from 'vue'
 export const useActiveSection = (ids: string[]): Ref<string> => {
   const activeSection = ref(ids[0] ?? '')
   let observer: IntersectionObserver | null = null
+  const ratios = new Map<string, number>()
 
   onMounted(() => {
-    const sections = ids
-      .map((id) => document.getElementById(id))
-      .filter((section): section is HTMLElement => section instanceof HTMLElement)
+    setTimeout(() => {
+      const sections = ids
+        .map((id) => document.getElementById(id))
+        .filter((section): section is HTMLElement => section instanceof HTMLElement)
 
-    if (!sections.length) return
+      if (!sections.length) return
 
-    observer = new IntersectionObserver(
-      (entries) => {
-        const visibleEntries = entries
-          .filter((entry) => entry.isIntersecting)
-          .sort((entryA, entryB) => entryB.intersectionRatio - entryA.intersectionRatio)
+      observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            ratios.set(entry.target.id, entry.isIntersecting ? entry.intersectionRatio : 0)
+          })
 
-        if (visibleEntries[0]) {
-          activeSection.value = visibleEntries[0].target.id
-        }
-      },
-      {
-        rootMargin: '-42% 0px -42% 0px',
-        threshold: [0.2, 0.35, 0.5, 0.75],
-      },
-    )
+          let mostVisible = ''
+          let maxRatio = 0
 
-    sections.forEach((section) => observer?.observe(section))
+          ratios.forEach((ratio, id) => {
+            if (ratio > maxRatio) {
+              maxRatio = ratio
+              mostVisible = id
+            }
+          })
+
+          if (mostVisible) {
+            activeSection.value = mostVisible
+          }
+        },
+        {
+          rootMargin: '-20% 0px -20% 0px',
+          threshold: [0, 0.1, 0.25, 0.5, 0.75, 1.0],
+        },
+      )
+
+      sections.forEach((section) => observer?.observe(section))
+    }, 100)
   })
 
   onUnmounted(() => {
