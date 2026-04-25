@@ -1,92 +1,37 @@
 <template>
-  <section id="about" class="relative py-32 lg:py-40 overflow-hidden">
-    <!-- Background decoration -->
-    <div class="absolute top-0 right-0 w-96 h-96 bg-purple-500/5 rounded-full blur-[120px] pointer-events-none"></div>
-    <div class="absolute bottom-0 left-0 w-80 h-80 bg-cyan-500/5 rounded-full blur-[100px] pointer-events-none"></div>
-
+  <section id="about" class="section-shell">
     <div class="container-custom">
-      <AnimateOnScroll>
-        <SectionTitle
-          :title="t.about.sectionTitle"
-          :subtitle="t.about.sectionSubtitle"
-          :description="t.about.sectionDesc"
-        />
-      </AnimateOnScroll>
-
-      <div class="grid grid-cols-1 lg:grid-cols-2 gap-14 xl:gap-20 items-center">
-        <!-- Left - Avatar & Decoration -->
-        <AnimateOnScroll>
-          <div class="relative flex justify-center lg:justify-center py-4">
-            <!-- Avatar container -->
-            <div class="relative">
-              <!-- Rotating gradient border -->
-              <div class="w-72 h-72 md:w-80 md:h-80 rounded-3xl animate-spin-slow absolute -inset-1 bg-gradient-to-r from-purple-500 via-cyan-500 to-purple-500 opacity-30 blur-sm"></div>
-
-              <!-- Avatar card -->
-              <div class="relative w-72 h-72 md:w-80 md:h-80 rounded-3xl overflow-hidden glass border border-white/10">
-                <div class="w-full h-full bg-gradient-to-br from-purple-600/30 via-cyan-500/20 to-purple-600/30 flex items-center justify-center">
-                  <div class="text-center">
-                    <div class="text-6xl mb-4">👨‍💻</div>
-                    <span class="text-lg font-bold gradient-text">Tuấn Dev</span>
-                  </div>
-                </div>
-              </div>
-
-              <!-- Floating badges -->
-              <div class="absolute -top-5 -right-5 glass rounded-2xl px-4 py-3 border border-white/10 animate-float text-sm">
-                <span class="text-purple-400">⚡</span> Fullstack
-              </div>
-              <div class="absolute -bottom-5 -left-5 glass rounded-2xl px-4 py-3 border border-white/10 animate-float-delay text-sm">
-                <span class="text-cyan-400">🚀</span> Clean Code
-              </div>
+      <div class="grid gap-12 lg:grid-cols-[minmax(0,0.92fr)_minmax(0,1.08fr)] lg:items-start">
+        <AnimateOnScroll class="space-y-8">
+          <SectionTitle
+            :eyebrow="siteContent.about.eyebrow"
+            :title="siteContent.about.title"
+            :description="siteContent.about.description"
+          />
+          <div class="surface-panel-soft detail-card rounded-[1.5rem] p-6 md:p-7">
+            <p class="mono-text text-xs uppercase tracking-[0.18em] text-slate-500">Principles</p>
+            <div class="mt-4 space-y-4 text-sm leading-7 text-slate-300 md:text-base">
+              <p v-for="paragraph in siteContent.about.paragraphs" :key="paragraph">
+                {{ paragraph }}
+              </p>
             </div>
           </div>
         </AnimateOnScroll>
 
-        <!-- Right - Content -->
         <AnimateOnScroll>
-          <div class="stack-lg">
-            <!-- Role badge -->
-            <div class="inline-flex items-center gap-3 px-5 py-3 rounded-full glass border border-white/10">
-              <span class="w-2.5 h-2.5 rounded-full bg-green-400"></span>
-              <span class="text-sm font-medium text-slate-300">{{ t.about.role }}</span>
-            </div>
-
-            <!-- Description -->
-            <div class="stack-md text-slate-400 leading-8 text-[1.02rem]">
-              <p>
-                {{ t.about.p1 }} <span class="text-white font-semibold">{{ t.about.p1Name }}</span>{{ t.about.p1End }}
+          <div class="grid gap-4 sm:grid-cols-2 grid-equal">
+            <SpotlightCard
+              as="article"
+              v-for="card in siteContent.about.cards"
+              :key="card.title"
+              class="surface-panel capability-card rounded-[1.5rem] p-6"
+            >
+              <p class="mono-text text-[0.7rem] uppercase tracking-[0.2em] text-slate-500">Focus</p>
+              <h3 class="mt-4 text-xl font-semibold text-white">{{ card.title }}</h3>
+              <p class="mt-4 text-sm leading-7 text-slate-400">
+                {{ card.description }}
               </p>
-              <p>
-                {{ t.about.p2Start }} <span class="text-purple-400 font-medium">{{ t.about.p2WebApps }}</span>,
-                <span class="text-cyan-400 font-medium">{{ t.about.p2APIs }}</span>{{ t.about.p2And }}
-                <span class="text-pink-400 font-medium">{{ t.about.p2SystemDesign }}</span>{{ t.about.p2End }}
-              </p>
-              <p>{{ t.about.p3 }}</p>
-            </div>
-
-            <!-- Info Cards Grid -->
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 mt-2">
-              <GlowCard
-                v-for="card in infoCards"
-                :key="card.title"
-                class="p-6 rounded-2xl"
-                :glow-color="card.glowColor"
-              >
-                <div class="flex items-start gap-[1.125rem]">
-                  <div
-                    class="w-12 h-12 rounded-xl flex items-center justify-center text-lg flex-shrink-0"
-                    :style="{ background: card.bgColor }"
-                  >
-                    {{ card.emoji }}
-                  </div>
-                  <div>
-                    <h4 class="text-base font-semibold text-white mb-2">{{ card.title }}</h4>
-                    <p class="text-sm text-slate-400 leading-relaxed">{{ card.description }}</p>
-                  </div>
-                </div>
-              </GlowCard>
-            </div>
+            </SpotlightCard>
           </div>
         </AnimateOnScroll>
       </div>
@@ -95,42 +40,8 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
 import SectionTitle from '../common/SectionTitle.vue'
 import AnimateOnScroll from '../common/AnimateOnScroll.vue'
-import GlowCard from '../ui/GlowCard.vue'
-import { useI18n } from '../../i18n'
-
-const { t } = useI18n()
-
-const infoCards = computed(() => [
-  {
-    emoji: '🎯',
-    title: t.value.about.cards.focus,
-    description: t.value.about.cards.focusDesc,
-    glowColor: 'rgba(139, 92, 246, 0.06)',
-    bgColor: 'rgba(139, 92, 246, 0.1)',
-  },
-  {
-    emoji: '📚',
-    title: t.value.about.cards.learning,
-    description: t.value.about.cards.learningDesc,
-    glowColor: 'rgba(6, 182, 212, 0.06)',
-    bgColor: 'rgba(6, 182, 212, 0.1)',
-  },
-  {
-    emoji: '💡',
-    title: t.value.about.cards.passion,
-    description: t.value.about.cards.passionDesc,
-    glowColor: 'rgba(236, 72, 153, 0.06)',
-    bgColor: 'rgba(236, 72, 153, 0.1)',
-  },
-  {
-    emoji: '🚀',
-    title: t.value.about.cards.goal,
-    description: t.value.about.cards.goalDesc,
-    glowColor: 'rgba(34, 211, 238, 0.06)',
-    bgColor: 'rgba(34, 211, 238, 0.1)',
-  },
-])
+import SpotlightCard from '../ui/SpotlightCard.vue'
+import { siteContent } from '../../content/siteContent'
 </script>

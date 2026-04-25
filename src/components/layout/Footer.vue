@@ -1,139 +1,67 @@
 <template>
-  <footer class="relative border-t border-white/5 bg-[#08080d]">
-    <!-- Gradient line on top -->
-    <div class="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-purple-500/50 to-transparent"></div>
+  <footer class="relative pb-10 pt-8">
+    <div class="container-custom">
+      <div class="editorial-divider mb-8"></div>
 
-    <div class="container-custom py-16 lg:py-20">
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-10 lg:gap-14">
-        <!-- Brand -->
-        <div class="stack-md">
-          <div class="flex items-center gap-3 mb-5">
-            <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-purple-500 to-cyan-500 flex items-center justify-center font-bold text-white text-lg">
-              T
-            </div>
-            <span class="text-xl font-bold">
-              <span class="text-white">Tuấn</span><span class="gradient-text">Dev</span>
-            </span>
-          </div>
-          <p class="text-sm text-slate-400 leading-relaxed max-w-xs">
-            {{ t.footer.description }}
+      <div class="grid gap-8 lg:grid-cols-[1.1fr_0.9fr] lg:items-end">
+        <div class="space-y-4">
+          <div class="eyebrow">Footer</div>
+          <h3 class="display-font text-2xl font-bold text-white">Tuan Dev</h3>
+          <p class="max-w-2xl text-sm leading-7 text-slate-400">
+            {{ siteContent.footer.blurb }}
+          </p>
+          <p class="mono-text text-xs uppercase tracking-[0.18em] text-slate-500">
+            {{ siteContent.footer.note }}
           </p>
         </div>
 
-        <!-- Quick Links -->
-        <div>
-          <h3 class="text-sm font-semibold text-white uppercase tracking-wider mb-5">{{ t.footer.quickLinks }}</h3>
-          <ul class="space-y-4">
-            <li v-for="link in quickLinks" :key="link.id">
-              <a
-                :href="`#${link.id}`"
-                class="text-sm text-slate-400 hover:text-purple-400 transition-colors duration-300 inline-flex py-1"
-                @click.prevent="scrollTo(link.id)"
-              >
-                {{ link.label }}
-              </a>
-            </li>
-          </ul>
-        </div>
+        <div class="grid gap-8 sm:grid-cols-2">
+          <div>
+            <p class="mb-4 text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">Navigation</p>
+            <ul class="space-y-3">
+              <li v-for="item in siteContent.nav" :key="item.id">
+                <a
+                  :href="`#${item.id}`"
+                  class="text-sm text-slate-400 transition-colors duration-200 hover:text-white"
+                  @click.prevent="scrollToSection(item.id)"
+                >
+                  {{ item.label }}
+                </a>
+              </li>
+            </ul>
+          </div>
 
-        <!-- Social -->
-        <div>
-          <h3 class="text-sm font-semibold text-white uppercase tracking-wider mb-5">{{ t.footer.connect }}</h3>
-          <div class="flex gap-4 flex-wrap">
-            <a
-              v-for="social in socialLinks"
-              :key="social.name"
-              :href="social.url"
-              target="_blank"
-              rel="noopener noreferrer"
-              class="icon-button"
-              :aria-label="social.name"
-            >
-              <component :is="getIcon(social.icon)" :size="18" />
-            </a>
+          <div>
+            <p class="mb-4 text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">Profiles</p>
+            <div class="flex flex-wrap gap-3">
+              <a
+                v-for="social in siteContent.socials"
+                :key="social.label"
+                :href="social.href"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="link-chip"
+              >
+                {{ social.label }}
+              </a>
+            </div>
           </div>
         </div>
       </div>
 
-      <!-- Bottom -->
-      <div class="mt-14 pt-8 border-t border-white/5 flex flex-col md:flex-row items-center justify-between gap-4">
-        <p class="text-xs text-slate-500">
-          © {{ currentYear }} Tuấn Dev. {{ t.footer.rights }}
-        </p>
-        <p class="text-xs text-slate-500 flex items-center gap-1.5">
-          {{ t.footer.madeWith }} <span class="text-red-400">❤</span> {{ t.footer.by }}
-          <span class="gradient-text font-semibold">Tuấn Dev</span>
+      <div class="mt-10 flex flex-col gap-3 border-t border-white/6 pt-6 text-xs text-slate-500 md:flex-row md:items-center md:justify-between">
+        <p>© {{ currentYear }} Tuan Dev. Dark editorial portfolio v1.</p>
+        <p class="mono-text uppercase tracking-[0.16em]">
+          Real case studies and public email replace TODO slots next.
         </p>
       </div>
     </div>
-
-    <!-- Back to top -->
-    <Transition name="fade">
-      <button
-        v-if="showBackToTop"
-        class="fixed bottom-8 right-8 w-14 h-14 rounded-2xl bg-gradient-to-br from-purple-600 via-purple-500 to-cyan-500 text-white flex items-center justify-center shadow-lg shadow-purple-500/25 hover:scale-110 transition-transform duration-300 z-40 cursor-pointer"
-        @click="scrollToTop"
-        aria-label="Back to top"
-      >
-        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m18 15-6-6-6 6"/></svg>
-      </button>
-    </Transition>
   </footer>
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted, computed, type FunctionalComponent } from 'vue'
-import { Github, Linkedin, Mail, Facebook } from 'lucide-vue-next'
-import { socialLinks } from '../../data/socialLinks'
-import { useI18n } from '../../i18n'
+import { siteContent } from '../../content/siteContent'
+import { scrollToSection } from '../../utils/scroll'
 
-const { t } = useI18n()
 const currentYear = new Date().getFullYear()
-const showBackToTop = ref(false)
-
-const quickLinks = computed(() => [
-  { id: 'hero', label: t.value.nav.home },
-  { id: 'about', label: t.value.nav.about },
-  { id: 'techstack', label: t.value.nav.skills },
-  { id: 'projects', label: t.value.nav.projects },
-  { id: 'contact', label: t.value.nav.contact },
-])
-
-const iconMap: Record<string, FunctionalComponent | typeof Github> = { Github, Linkedin, Mail, Facebook }
-const getIcon = (name: string) => iconMap[name] || Mail
-
-const scrollTo = (id: string) => {
-  const el = document.getElementById(id)
-  if (el) {
-    window.scrollTo({ top: el.offsetTop - 80, behavior: 'smooth' })
-  }
-}
-
-const scrollToTop = () => {
-  window.scrollTo({ top: 0, behavior: 'smooth' })
-}
-
-const handleScroll = () => {
-  showBackToTop.value = window.scrollY > 500
-}
-
-onMounted(() => {
-  window.addEventListener('scroll', handleScroll, { passive: true })
-})
-
-onUnmounted(() => {
-  window.removeEventListener('scroll', handleScroll)
-})
 </script>
-
-<style scoped>
-.fade-enter-active,
-.fade-leave-active {
-  transition: all 0.3s ease;
-}
-.fade-enter-from,
-.fade-leave-to {
-  opacity: 0;
-  transform: translateY(10px);
-}
-</style>

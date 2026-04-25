@@ -1,26 +1,22 @@
 <template>
   <div
-    v-if="!isDone"
+    v-if="shouldRender"
     ref="preloader"
-    class="fixed inset-0 z-[99999] flex flex-col items-center justify-center bg-[#030303]"
+    class="fixed inset-0 z-[99999] flex items-center justify-center bg-[#090b10]"
   >
-    <!-- Logo or text -->
-    <div class="relative overflow-hidden mb-6">
-      <h1 ref="textRef" class="text-4xl md:text-6xl font-black tracking-tighter text-white translate-y-full opacity-0">
-        TUẤN <span class="text-purple-500">DEV</span>
+    <div class="w-full max-w-sm px-6 text-center">
+      <p ref="eyebrowRef" class="mono-text text-xs uppercase tracking-[0.28em] text-slate-500 opacity-0">
+        Tuan Dev
+      </p>
+      <h1 ref="textRef" class="display-font mt-5 text-4xl font-bold text-white opacity-0 md:text-5xl">
+        Loading the editorial build.
       </h1>
-    </div>
-
-    <!-- Progress bar -->
-    <div class="w-48 h-[2px] bg-white/10 rounded-full overflow-hidden">
-      <div
-        ref="progressBar"
-        class="h-full bg-gradient-to-r from-purple-500 to-cyan-500 w-0"
-      ></div>
-    </div>
-    
-    <div class="mt-4 text-sm text-slate-500 font-mono">
-      {{ progress }}%
+      <div class="mt-8 h-px overflow-hidden rounded-full bg-white/8">
+        <div ref="progressBar" class="h-full w-0 bg-gradient-to-r from-orange-500 via-orange-300 to-sky-300"></div>
+      </div>
+      <p class="mono-text mt-4 text-[11px] uppercase tracking-[0.2em] text-slate-500">
+        {{ progress }}%
+      </p>
     </div>
   </div>
 </template>
@@ -28,52 +24,62 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
 import { gsap } from 'gsap'
+import { useReducedMotion } from '../../composables/useReducedMotion'
 
-const isDone = ref(false)
+const shouldRender = ref(true)
 const preloader = ref<HTMLElement | null>(null)
+const eyebrowRef = ref<HTMLElement | null>(null)
 const textRef = ref<HTMLElement | null>(null)
 const progressBar = ref<HTMLElement | null>(null)
 const progress = ref(0)
+const prefersReducedMotion = useReducedMotion()
 
 onMounted(() => {
-  // Hide scrollbar during preload
+  if (prefersReducedMotion.value) {
+    shouldRender.value = false
+    return
+  }
+
+  shouldRender.value = true
   document.body.style.overflow = 'hidden'
 
-  const tl = gsap.timeline({
+  const timeline = gsap.timeline({
     onComplete: () => {
       document.body.style.overflow = ''
-      setTimeout(() => {
-        isDone.value = true
-      }, 500)
-    }
+      shouldRender.value = false
+    },
   })
 
-  // Reveal text
-  tl.to(textRef.value, {
-    y: 0,
+  timeline.to(eyebrowRef.value, {
     opacity: 1,
-    duration: 0.8,
-    ease: 'power3.out',
+    y: 0,
+    duration: 0.45,
+    ease: 'power2.out',
   })
 
-  // Animate progress bar
-  tl.to(
+  timeline.to(textRef.value, {
+    opacity: 1,
+    y: 0,
+    duration: 0.65,
+    ease: 'power3.out',
+  }, '-=0.2')
+
+  timeline.to(
     progressBar.value,
     {
       width: '100%',
-      duration: 1.5,
+      duration: 0.85,
       ease: 'power2.inOut',
-      onUpdate: function () {
+      onUpdate() {
         progress.value = Math.round(this.progress() * 100)
       },
     },
-    '-=0.2'
+    '-=0.1',
   )
 
-  // Slide out preloader
-  tl.to(preloader.value, {
-    yPercent: -100,
-    duration: 0.8,
+  timeline.to(preloader.value, {
+    autoAlpha: 0,
+    duration: 0.42,
     ease: 'power4.inOut',
   })
 })

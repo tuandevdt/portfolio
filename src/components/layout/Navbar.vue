@@ -1,164 +1,109 @@
 <template>
-  <nav
-    class="fixed top-0 left-0 right-0 z-50 transition-all duration-500"
-    :class="[
-      isScrolled
-        ? 'py-3 bg-[#0a0a0f]/80 backdrop-blur-2xl border-b border-white/5 shadow-lg shadow-black/20'
-        : 'py-4 bg-transparent',
-    ]"
-  >
-    <div class="container-custom flex items-center justify-between">
-      <!-- Logo -->
-      <a href="#hero" class="flex items-center gap-3 group" @click.prevent="scrollToSection('hero')">
-        <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-purple-500 to-cyan-500 flex items-center justify-center font-bold text-white text-lg transform group-hover:scale-110 transition-transform duration-300">
-          T
-        </div>
-        <span class="text-xl font-bold">
-          <span class="text-white">Tuấn</span><span class="gradient-text">Dev</span>
-        </span>
-      </a>
-
-      <!-- Desktop Menu -->
-      <ul class="hidden md:flex items-center gap-3">
-        <li v-for="item in menuItems" :key="item.id">
-          <a
-            :href="`#${item.id}`"
-            class="relative px-4 lg:px-5 py-2.5 text-[0.95rem] font-medium transition-colors duration-300 rounded-xl"
-            :class="[
-              activeSection === item.id
-                ? 'text-white'
-                : 'text-slate-400 hover:text-white',
-            ]"
-            @click.prevent="scrollToSection(item.id)"
-          >
-            {{ item.label }}
-            <span
-              v-if="activeSection === item.id"
-              class="absolute bottom-0 left-1/2 -translate-x-1/2 w-4 h-0.5 rounded-full bg-gradient-to-r from-purple-500 to-cyan-500"
-            ></span>
-          </a>
-        </li>
-      </ul>
-
-      <!-- Right side: Language + CTA -->
-      <div class="hidden md:flex items-center gap-3.5">
-        <!-- Language Switcher -->
-        <button
-          class="flex min-h-[3rem] items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-medium text-slate-300 hover:text-white glass border border-white/10 hover:border-white/20 transition-all duration-300 cursor-pointer"
-          @click="toggleLocale"
-          :title="t.language"
-        >
-          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></svg>
-          {{ locale === 'vi' ? 'EN' : 'VI' }}
-        </button>
-
-        <!-- CTA Button -->
-        <a
-          href="#contact"
-          class="inline-flex min-h-[3rem] items-center gap-2.5 px-5 py-3 text-sm font-semibold rounded-2xl bg-gradient-to-r from-purple-600 via-purple-500 to-cyan-500 text-white shadow-lg shadow-purple-500/15 hover:shadow-xl hover:shadow-purple-500/25 transition-all duration-300 transform hover:scale-105"
-          @click.prevent="scrollToSection('contact')"
-        >
-          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-          {{ t.nav.contact }}
-        </a>
-      </div>
-
-      <!-- Mobile Menu Toggle -->
-      <div class="md:hidden flex items-center gap-3">
-        <!-- Mobile Language -->
-        <button
-          class="flex min-h-[2.5rem] items-center gap-1.5 px-3 py-2 rounded-xl text-sm font-medium text-slate-300 glass border border-white/10 cursor-pointer"
-          @click="toggleLocale"
-        >
-          {{ locale === 'vi' ? 'EN' : 'VI' }}
-        </button>
-        <button
-          class="flex flex-col gap-1.5 p-3 rounded-xl glass border border-white/10 cursor-pointer"
-          @click="isMobileMenuOpen = !isMobileMenuOpen"
-          aria-label="Toggle menu"
-        >
-          <span class="block w-6 h-0.5 bg-white transition-all duration-300" :class="{ 'rotate-45 translate-y-2': isMobileMenuOpen }"></span>
-          <span class="block w-6 h-0.5 bg-white transition-all duration-300" :class="{ 'opacity-0': isMobileMenuOpen }"></span>
-          <span class="block w-6 h-0.5 bg-white transition-all duration-300" :class="{ '-rotate-45 -translate-y-2': isMobileMenuOpen }"></span>
-        </button>
-      </div>
-    </div>
-
-    <!-- Mobile Menu -->
-    <Transition name="mobile-menu">
+  <nav class="fixed inset-x-0 top-0 z-50">
+    <div class="container-custom pt-4 md:pt-5">
       <div
-        v-if="isMobileMenuOpen"
-        class="md:hidden absolute top-full left-0 right-0 bg-[#0a0a0f]/95 backdrop-blur-2xl border-b border-white/5"
+        class="surface-panel-soft flex items-center justify-between gap-4 rounded-full px-4 py-3 md:px-6 transition-all duration-300"
+        :class="isScrolled ? 'border-white/14 shadow-[0_22px_50px_-32px_rgba(0,0,0,0.85)]' : 'border-white/8'"
       >
-        <ul class="container-custom py-5 flex flex-col gap-2.5">
-          <li v-for="item in menuItems" :key="item.id">
+        <a href="#hero" class="flex items-center gap-3" @click.prevent="handleJump('hero')">
+          <div class="flex h-11 w-11 items-center justify-center rounded-full bg-white/6 text-sm font-bold text-white ring-1 ring-white/10">
+            TD
+          </div>
+          <div class="hidden sm:block">
+            <p class="display-font text-sm font-bold uppercase tracking-[0.3em] text-white">Tuan Dev</p>
+            <p class="text-xs text-slate-400">Fullstack Developer</p>
+          </div>
+        </a>
+
+        <ul class="hidden items-center gap-2 lg:flex">
+          <li v-for="item in siteContent.nav" :key="item.id">
             <a
               :href="`#${item.id}`"
-              class="block px-4 py-3.5 text-base font-medium rounded-2xl transition-all duration-300"
-              :class="[
-                activeSection === item.id
-                  ? 'text-white bg-white/5'
-                  : 'text-slate-400 hover:text-white hover:bg-white/5',
-              ]"
-              @click.prevent="scrollToSection(item.id); isMobileMenuOpen = false"
+              class="rounded-full px-4 py-2 text-sm font-semibold transition-colors duration-200"
+              :class="activeSection === item.id ? 'bg-white/8 text-white' : 'text-slate-400 hover:text-white'"
+              @click.prevent="handleJump(item.id)"
             >
               {{ item.label }}
             </a>
           </li>
-          <li class="mt-3">
-            <a
-              href="#contact"
-              class="block text-center px-4 py-3.5 text-base font-semibold rounded-2xl bg-gradient-to-r from-purple-600 via-purple-500 to-cyan-500 text-white shadow-lg shadow-purple-500/15"
-              @click.prevent="scrollToSection('contact'); isMobileMenuOpen = false"
-            >
-              {{ t.nav.contactNow }}
-            </a>
-          </li>
         </ul>
+
+        <div class="hidden items-center gap-3 lg:flex">
+          <a
+            :href="siteContent.contact.primaryCta.href"
+            class="button-primary"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            {{ siteContent.contact.primaryCta.label }}
+          </a>
+        </div>
+
+        <button
+          class="button-tertiary lg:hidden"
+          type="button"
+          @click="isMobileMenuOpen = !isMobileMenuOpen"
+          aria-label="Toggle menu"
+        >
+          <span class="block h-0.5 w-5 bg-white transition-transform duration-200" :class="{ 'translate-y-[5px] rotate-45': isMobileMenuOpen }"></span>
+          <span class="block h-0.5 w-5 bg-white transition-opacity duration-200" :class="{ 'opacity-0': isMobileMenuOpen }"></span>
+          <span class="block h-0.5 w-5 bg-white transition-transform duration-200" :class="{ '-translate-y-[5px] -rotate-45': isMobileMenuOpen }"></span>
+        </button>
       </div>
-    </Transition>
+
+      <Transition name="mobile-menu">
+        <div v-if="isMobileMenuOpen" class="mt-3 lg:hidden">
+          <div class="surface-panel rounded-[1.5rem] p-4">
+            <ul class="flex flex-col gap-2">
+              <li v-for="item in siteContent.nav" :key="item.id">
+                <a
+                  :href="`#${item.id}`"
+                  class="block rounded-2xl px-4 py-3 text-sm font-semibold transition-colors duration-200"
+                  :class="activeSection === item.id ? 'bg-white/8 text-white' : 'text-slate-400 hover:bg-white/5 hover:text-white'"
+                  @click.prevent="handleJump(item.id)"
+                >
+                  {{ item.label }}
+                </a>
+              </li>
+            </ul>
+            <div class="editorial-divider my-4"></div>
+            <a
+              :href="siteContent.contact.primaryCta.href"
+              class="button-primary w-full"
+              target="_blank"
+              rel="noopener noreferrer"
+              @click="isMobileMenuOpen = false"
+            >
+              {{ siteContent.contact.primaryCta.label }}
+            </a>
+          </div>
+        </div>
+      </Transition>
+    </div>
   </nav>
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted, computed } from 'vue'
-import { useI18n } from '../../i18n'
-
-const { t, locale, toggleLocale } = useI18n()
-
-const menuItems = computed(() => [
-  { id: 'hero', label: t.value.nav.home },
-  { id: 'about', label: t.value.nav.about },
-  { id: 'techstack', label: t.value.nav.skills },
-  { id: 'projects', label: t.value.nav.projects },
-  { id: 'contact', label: t.value.nav.contact },
-])
+import { ref, onMounted, onUnmounted } from 'vue'
+import { siteContent, sectionIds, type SectionId } from '../../content/siteContent'
+import { scrollToSection } from '../../utils/scroll'
+import { useActiveSection } from '../../composables/useActiveSection'
 
 const isScrolled = ref(false)
 const isMobileMenuOpen = ref(false)
-const activeSection = ref('hero')
+const activeSection = useActiveSection(sectionIds)
 
 const handleScroll = () => {
-  isScrolled.value = window.scrollY > 50
-  const sections = menuItems.value.map((item) => document.getElementById(item.id))
-  const scrollPos = window.scrollY + 150
-  for (let i = sections.length - 1; i >= 0; i--) {
-    const section = sections[i]
-    if (section && section.offsetTop <= scrollPos) {
-      activeSection.value = menuItems.value[i].id
-      break
-    }
-  }
+  isScrolled.value = window.scrollY > 18
 }
 
-const scrollToSection = (id: string) => {
-  const el = document.getElementById(id)
-  if (el) {
-    window.scrollTo({ top: el.offsetTop - 80, behavior: 'smooth' })
-  }
+const handleJump = (id: SectionId) => {
+  isMobileMenuOpen.value = false
+  scrollToSection(id)
 }
 
 onMounted(() => {
+  handleScroll()
   window.addEventListener('scroll', handleScroll, { passive: true })
 })
 
@@ -170,11 +115,12 @@ onUnmounted(() => {
 <style scoped>
 .mobile-menu-enter-active,
 .mobile-menu-leave-active {
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all 0.24s ease;
 }
+
 .mobile-menu-enter-from,
 .mobile-menu-leave-to {
   opacity: 0;
-  transform: translateY(-10px);
+  transform: translateY(-8px);
 }
 </style>
