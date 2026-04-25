@@ -6,12 +6,16 @@
         :class="isScrolled ? 'border-white/14 shadow-[0_22px_50px_-32px_rgba(0,0,0,0.85)]' : 'border-white/8'"
       >
         <a href="#hero" class="flex items-center gap-3" @click.prevent="handleJump('hero')">
-          <div class="flex h-11 w-11 items-center justify-center rounded-full bg-white/6 text-sm font-bold text-white ring-1 ring-white/10">
+          <!-- TODO: Nơi thay ảnh Avatar sau này. 
+               Bạn có thể thay thẻ <div> chữ "TD" bên dưới bằng một thẻ <img> như sau:
+               <img src="/du-ong-dan-anh-cua-ban.jpg" alt="Tuan Dev" class="h-11 w-11 shrink-0 rounded-full object-cover ring-1 ring-white/10" />
+          -->
+          <div class="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-white/6 text-sm font-bold text-white ring-1 ring-white/10">
             TD
           </div>
-          <div class="hidden sm:block">
+          <div class="block">
             <p class="display-font text-sm font-bold uppercase tracking-[0.3em] text-white">Tuan Dev</p>
-            <p class="text-xs text-slate-400">Fullstack Developer</p>
+            <p class="hidden text-xs text-slate-400 sm:block">Fullstack Developer</p>
           </div>
         </a>
 
@@ -99,6 +103,7 @@ const handleScroll = () => {
 
 const handleJump = (id: SectionId) => {
   isMobileMenuOpen.value = false
+  activeSection.value = id
   scrollToSection(id)
 }
 
