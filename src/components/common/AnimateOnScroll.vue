@@ -1,51 +1,53 @@
 <template>
-  <div ref="el" class="animate-on-scroll" :class="{ visible: isVisible }">
+  <div ref="el" class="reveal" :class="{ 'is-visible': isVisible }">
     <slot />
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
-import { useIntersectionObserver } from '@vueuse/core'
+import { ref, onMounted, onUnmounted } from 'vue'
+import { useReducedMotion } from '../../composables/useReducedMotion'
 
 interface Props {
-  threshold?: number
   rootMargin?: string
+  threshold?: number
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  threshold: 0.1,
-  rootMargin: '0px 0px -50px 0px',
+  rootMargin: '0px 0px -10% 0px',
+  threshold: 0.18,
 })
 
 const el = ref<HTMLElement | null>(null)
 const isVisible = ref(false)
+const prefersReducedMotion = useReducedMotion()
+let observer: IntersectionObserver | null = null
 
 onMounted(() => {
-  useIntersectionObserver(
-    el,
-    ([{ isIntersecting }]) => {
-      if (isIntersecting) {
+  if (prefersReducedMotion.value) {
+    isVisible.value = true
+    return
+  }
+
+  if (!el.value) return
+
+  observer = new IntersectionObserver(
+    ([entry]) => {
+      if (entry?.isIntersecting) {
         isVisible.value = true
+        observer?.disconnect()
       }
     },
     {
       threshold: props.threshold,
       rootMargin: props.rootMargin,
-    }
+    },
   )
+
+  observer.observe(el.value)
+})
+
+onUnmounted(() => {
+  observer?.disconnect()
 })
 </script>
-
-<style scoped>
-.animate-on-scroll {
-  opacity: 0;
-  transform: translateY(40px);
-  transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.animate-on-scroll.visible {
-  opacity: 1;
-  transform: translateY(0);
-}
-</style>

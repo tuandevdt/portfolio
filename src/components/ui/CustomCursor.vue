@@ -1,64 +1,80 @@
 <template>
-  <div class="custom-cursor hidden lg:block pointer-events-none fixed inset-0 z-[10000]">
+  <div v-if="isEnabled" class="pointer-events-none fixed inset-0 z-[10000] hidden lg:block">
     <div
       ref="cursorDot"
-      class="cursor-dot absolute w-2 h-2 bg-purple-400 rounded-full -translate-x-1/2 -translate-y-1/2"
-    ></div>
+      class="absolute h-2 w-2 -translate-x-1/2 -translate-y-1/2 rounded-full bg-orange-400"
+    />
     <div
       ref="cursorRing"
-      class="cursor-ring absolute w-8 h-8 border border-cyan-400/50 rounded-full -translate-x-1/2 -translate-y-1/2 transition-all duration-300 ease-out"
-      :class="{ 'scale-[1.5] border-purple-400 bg-purple-400/10': isHovering }"
-    ></div>
+      class="absolute h-10 w-10 -translate-x-1/2 -translate-y-1/2 rounded-full border border-sky-300/50 bg-sky-200/5 transition-[width,height,background-color,border-color] duration-200 ease-out"
+      :class="isHovering ? 'h-14 w-14 border-orange-300/60 bg-orange-200/10' : ''"
+    />
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted } from 'vue'
-import { gsap } from 'gsap'
+import { useReducedMotion } from '../../composables/useReducedMotion'
 
 const cursorDot = ref<HTMLElement | null>(null)
 const cursorRing = ref<HTMLElement | null>(null)
 const isHovering = ref(false)
+const isEnabled = ref(false)
+const prefersReducedMotion = useReducedMotion()
+
+let animationFrameId = 0
+const pointer = { x: 0, y: 0 }
+const ring = { x: 0, y: 0 }
+
+const renderCursor = () => {
+  ring.x += (pointer.x - ring.x) * 0.18
+  ring.y += (pointer.y - ring.y) * 0.18
+
+  if (cursorDot.value) {
+    cursorDot.value.style.transform = `translate3d(${pointer.x}px, ${pointer.y}px, 0)`
+  }
+
+  if (cursorRing.value) {
+    cursorRing.value.style.transform = `translate3d(${ring.x}px, ${ring.y}px, 0)`
+  }
+
+  animationFrameId = requestAnimationFrame(renderCursor)
+}
+
+const onMouseMove = (event: MouseEvent) => {
+  pointer.x = event.clientX
+  pointer.y = event.clientY
+}
+
+const onMouseOver = (event: MouseEvent) => {
+  const target = event.target as HTMLElement
+  if (
+    target.closest('a') ||
+    target.closest('button') ||
+    target.closest('input') ||
+    target.closest('textarea')
+  ) {
+    isHovering.value = true
+  } else {
+    isHovering.value = false
+  }
+}
 
 onMounted(() => {
-  const onMouseMove = (e: MouseEvent) => {
-    if (cursorDot.value && cursorRing.value) {
-      gsap.to(cursorDot.value, {
-        x: e.clientX,
-        y: e.clientY,
-        duration: 0,
-      })
-      gsap.to(cursorRing.value, {
-        x: e.clientX,
-        y: e.clientY,
-        duration: 0.15,
-      })
-    }
-  }
+  const finePointer = window.matchMedia('(pointer: fine)').matches
+  if (prefersReducedMotion.value || !finePointer) return
 
-  const onMouseOver = (e: MouseEvent) => {
-    const target = e.target as HTMLElement
-    const clickableElements = ['A', 'BUTTON', 'INPUT', 'TEXTAREA', 'SELECT']
-    if (
-      clickableElements.includes(target.tagName) ||
-      target.closest('a') ||
-      target.closest('button') ||
-      target.closest('.magnetic-btn') ||
-      target.closest('.icon-button') ||
-      target.closest('.glow-card-wrapper')
-    ) {
-      isHovering.value = true
-    } else {
-      isHovering.value = false
-    }
-  }
-
+  isEnabled.value = true
+  document.documentElement.classList.add('has-custom-cursor')
   window.addEventListener('mousemove', onMouseMove)
   window.addEventListener('mouseover', onMouseOver)
+  animationFrameId = requestAnimationFrame(renderCursor)
+})
 
-  onUnmounted(() => {
-    window.removeEventListener('mousemove', onMouseMove)
-    window.removeEventListener('mouseover', onMouseOver)
-  })
+onUnmounted(() => {
+  window.removeEventListener('mousemove', onMouseMove)
+  window.removeEventListener('mouseover', onMouseOver)
+  cancelAnimationFrame(animationFrameId)
+  document.documentElement.classList.remove('has-custom-cursor')
 })
 </script>
