@@ -38,9 +38,9 @@
 
         <AnimateOnScroll>
           <div class="surface-panel-soft rounded-[1.5rem] p-6 md:p-7">
-            <p class="mono-text text-xs uppercase tracking-[0.18em] text-slate-500">Why this changed</p>
+            <p class="mono-text text-xs uppercase tracking-[0.18em] text-slate-500">Philosophy</p>
             <p class="mt-4 max-w-4xl text-sm leading-7 text-slate-300 md:text-base">
-              The previous icon wall looked active but did not prove much. This version groups capabilities by delivery function so the portfolio reads like a working practice, not a badge collection.
+              Capabilities are organized by delivery function — how the work actually ships — rather than a flat list of tool logos. Each group reflects a real layer of the development workflow, from pixel-perfect interfaces to production-ready APIs and deployment pipelines.
             </p>
           </div>
         </AnimateOnScroll>
