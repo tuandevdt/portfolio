@@ -28,6 +28,14 @@
                   {{ project.status }}
                 </span>
               </div>
+              
+              <div v-if="project.image" class="group mt-5 h-72 w-full overflow-hidden rounded-xl border border-white/10">
+                <img 
+                  :src="project.image" 
+                  :alt="project.title" 
+                  class="h-full w-full object-cover object-top transition-all duration-[5000ms] ease-in-out group-hover:object-bottom" 
+                />
+              </div>
 
               <h3 class="mt-6 text-2xl font-semibold text-white">{{ project.title }}</h3>
               <p class="mt-4 text-sm leading-7 text-slate-300 md:text-base">

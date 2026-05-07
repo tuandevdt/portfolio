@@ -52,7 +52,7 @@
       <div class="mt-10 flex flex-col gap-3 border-t border-white/6 pt-6 text-xs text-slate-500 md:flex-row md:items-center md:justify-between">
         <p>© {{ currentYear }} Tuan Dev. Dark editorial portfolio v1.</p>
         <p class="mono-text uppercase tracking-[0.16em]">
-          Real case studies and public email replace TODO slots next.
+          Built with Vue 3, Tailwind CSS & TypeScript.
         </p>
       </div>
     </div>

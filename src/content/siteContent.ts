@@ -1,3 +1,7 @@
+import p5eventImg from '../assets/images/project/5pevent/home.png'
+import airemakeproImg from '../assets/images/project/airemakepro/home.png'
+import templatewebImg from '../assets/images/project/templateweb/home.png'
+
 export type SectionId = 'hero' | 'about' | 'capabilities' | 'projects' | 'contact'
 export type ProjectLinkStatus = 'live' | 'case-study' | 'private' | 'todo'
 
@@ -51,10 +55,11 @@ export interface ProjectItem {
   tags: string[]
   status: ProjectLinkStatus
   links: ProjectLink[]
+  image?: string
 }
 
 export interface ContactChannel {
-  icon: 'linkedin' | 'github' | 'mail' | 'map-pin' | 'clock-4'
+  icon: 'linkedin' | 'github' | 'mail' | 'map-pin'
   label: string
   value: string
   href?: string
@@ -78,6 +83,8 @@ export interface SiteContent {
     secondaryCta: CtaLink
     note: string
     proofItems: HeroProofItem[]
+    approachText: string
+    techStackText: string
   }
   about: {
     eyebrow: string
@@ -142,12 +149,12 @@ export const siteContent: SiteContent = {
     { id: 'contact', label: 'Contact' },
   ],
   hero: {
-    eyebrow: 'Dark editorial portfolio refresh',
+    eyebrow: 'Dark editorial portfolio',
     title: 'Fullstack systems with sharp interfaces and solid delivery underneath.',
     summary:
-      'I build product surfaces, backend services, and handoff-ready systems that feel considered from the first screen to the operational layer.',
+      'I am a full-stack developer with expertise in building scalable web applications. My technical stack includes Node.js, Python, Vue, React, PostgreSQL, MySQL, Postman, Tailwind CSS, and TypeScript.',
     description:
-      'This version is intentionally English-first and structure-driven. Real case studies, final metrics, and a public work email are still marked as TODOs instead of being faked.',
+      'I build product surfaces, backend services, and handoff-ready systems that feel considered from the first screen to the operational layer.',
     primaryCta: {
       label: 'View selected work',
       href: '#projects',
@@ -156,13 +163,15 @@ export const siteContent: SiteContent = {
       label: 'Open contact',
       href: '#contact',
     },
-    note: 'TODO: replace the placeholder project slots below with verified launches, screenshots, and measurable outcomes.',
+    note: 'Selected works and case studies are available below.',
     proofItems: [
       { label: 'Focus', value: 'Frontend + Backend' },
       { label: 'Delivery', value: 'Clean handoff' },
-      { label: 'Location', value: 'Vietnam / ICT' },
+      { label: 'Location', value: 'Da Nang, Vietnam' },
       { label: 'Status', value: 'Open to roles' },
     ],
+    approachText: 'Less glow, clearer hierarchy, and UI surfaces that feel intentional instead of decorative.',
+    techStackText: 'Node.js, Vue 3, TypeScript, Python, and scalable databases.',
   },
   about: {
     eyebrow: 'About',
@@ -220,55 +229,58 @@ export const siteContent: SiteContent = {
   },
   projects: {
     eyebrow: 'Projects',
-    title: 'The archive is being refreshed with verified case studies.',
+    title: 'Selected works & case studies.',
     description:
-      'Instead of inventing finished work, the section keeps explicit case-study slots ready for real content, links, screenshots, and outcomes.',
+      'A collection of recent projects demonstrating frontend architecture, backend delivery, and full-stack implementation.',
     archiveNote:
-      'Ship the structure now. Replace each slot with an actual launch, measurable result, and public proof when that material is ready.',
+      'These projects highlight my experience in building scalable and modern web applications from end to end.',
     items: [
       {
-        slug: 'flagship-product-slot',
-        title: 'Flagship product case study',
+        slug: '5pevent',
+        title: '5Pevent',
         summary:
-          'Use this slot for the strongest public product build: polished interface, clear product goal, and a result worth naming.',
-        note: 'TODO: add real title, screenshots, stack decisions, and a live or case-study link.',
-        tags: ['UI quality', 'Product thinking', 'Frontend architecture'],
-        status: 'todo',
-        links: [{ label: 'TODO add public link', status: 'todo' }],
+          'A full-featured event management platform for 5Pevent — covering company introduction, equipment rental catalog, and end-to-end event organization services with turnkey packages tailored for corporate and private clients.',
+        note: 'Live production site with real-time equipment inventory management, smooth service booking flow, and a polished client-facing experience.',
+        tags: ['Node.js', 'Cloudinary', 'JWT', 'MySQL', 'NodeMailer', 'TypeScript', 'Vue 3', 'Tailwind CSS'],
+        status: 'live',
+        links: [{ label: 'View Live Site', status: 'live', href: 'https://5pevent.vn/' }],
+        image: p5eventImg,
       },
       {
-        slug: 'api-platform-slot',
-        title: 'API or platform case study',
+        slug: 'airemakepro',
+        title: 'AIRemakePro',
         summary:
-          'Use this slot for backend-heavy work with architecture decisions, constraints, and reliability or performance detail.',
-        note: 'TODO: add concrete scope, system constraints, and one meaningful metric or operational result.',
-        tags: ['API design', 'Backend delivery', 'Data flow'],
-        status: 'todo',
-        links: [{ label: 'TODO add case-study link', status: 'todo' }],
+          'A SaaS licensing and subscription platform for Remake Video Pro — enabling users to purchase license keys, subscribe to rental plans, and access a free-tier toolset directly from the system.',
+        note: 'Integrated with Web2M online payment gateway for fully automated transaction processing, real-time license activation, and seamless subscription lifecycle management.',
+        tags: ['Node.js', 'Web2M Payment', 'Cloudinary', 'JWT', 'MySQL', 'NodeMailer', 'TypeScript', 'Vue 3', 'Tailwind CSS'],
+        status: 'live',
+        links: [{ label: 'View Live Site', status: 'live', href: 'https://airemakepro.com/' }],
+        image: airemakeproImg,
       },
       {
-        slug: 'internal-tooling-slot',
-        title: 'Internal tooling or workflow case study',
+        slug: 'templateweb',
+        title: 'Template Website',
         summary:
-          'Use this slot for the work that improved delivery speed, operational clarity, or team workflow quality.',
-        note: 'TODO: add before/after context and a visible impact on delivery, maintenance, or quality.',
-        tags: ['Tooling', 'Workflow', 'Maintainability'],
-        status: 'private',
-        links: [{ label: 'Private work', status: 'private' }],
+          'A showcase platform presenting a curated collection of modern website templates to prospective clients, complemented by custom web design and development services tailored to individual business needs.',
+        note: 'Features a sleek, contemporary interface with carefully crafted visual aesthetics and optimized user experience designed to convert visitors into clients.',
+        tags: ['Vue 3', 'TypeScript', 'Tailwind CSS'],
+        status: 'live',
+        links: [{ label: 'View Live Site', status: 'live', href: 'https://websitecraft-eta.vercel.app/' }],
+        image: templatewebImg,
       },
     ],
   },
   contact: {
     eyebrow: 'Contact',
-    title: 'Use the channels that already exist. Add public email when ready.',
+    title: 'Available for full-time roles and collaborations.',
     description:
-      'The contact area keeps real profile links available now and leaves the email slot as a visible TODO instead of shipping a fake address.',
+      'Feel free to reach out to discuss new opportunities or collaborations. You can find me on these platforms or email me directly.',
     channels: [
       {
         icon: 'linkedin',
         label: 'LinkedIn',
         value: 'linkedin.com/in/tuandevdt',
-        href: 'https://linkedin.com/in/tuandevdt',
+        href: 'https://www.linkedin.com/in/tuấn-doãn-a47272340/',
       },
       {
         icon: 'github',
@@ -279,23 +291,18 @@ export const siteContent: SiteContent = {
       {
         icon: 'mail',
         label: 'Work email',
-        value: 'TODO add public work email',
-        note: 'No dead mailto link is shipped in this version.',
-      },
-      {
-        icon: 'clock-4',
-        label: 'Timezone',
-        value: 'ICT (UTC+7)',
+        value: 'tuandtdeveloper@gmail.com',
+        href: 'mailto:tuandtdeveloper@gmail.com',
       },
       {
         icon: 'map-pin',
         label: 'Location',
-        value: 'Vietnam',
+        value: 'Da Nang, Vietnam',
       },
     ],
     primaryCta: {
       label: 'Message on LinkedIn',
-      href: 'https://linkedin.com/in/tuandevdt',
+      href: 'https://www.linkedin.com/in/tuấn-doãn-a47272340/',
       external: true,
     },
     secondaryCta: {
@@ -304,17 +311,16 @@ export const siteContent: SiteContent = {
       external: true,
     },
     availability: 'Available for full-time roles and select freelance collaboration.',
-    footerNote:
-      'TODO: replace the email slot above once a public work address is ready.',
+    footerNote: 'Available for new opportunities.',
   },
   footer: {
     blurb:
-      'Dark editorial one-page portfolio focused on product implementation, backend delivery, and structure that is ready for real case studies.',
-    note: 'Built to remove template noise first, then layer real project proof on top.',
+      'Fullstack developer specializing in polished product interfaces, reliable backend services, and end-to-end web application delivery.',
+    note: 'Designed and built with Vue 3, TypeScript, and Tailwind CSS.',
   },
   socials: [
     { label: 'GitHub', href: 'https://github.com/tuandevdt' },
-    { label: 'LinkedIn', href: 'https://linkedin.com/in/tuandevdt' },
+    { label: 'LinkedIn', href: 'https://www.linkedin.com/in/tuấn-doãn-a47272340/' },
   ],
 }
 

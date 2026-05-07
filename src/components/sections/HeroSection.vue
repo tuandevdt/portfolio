@@ -5,12 +5,8 @@
         <AnimateOnScroll class="space-y-8">
           <div class="space-y-5">
             <div class="flex items-center gap-5">
-              <!-- TODO: Thay ảnh Avatar lớn của bạn ở đây -->
               <div class="relative flex h-[5.5rem] w-[5.5rem] shrink-0 items-center justify-center overflow-hidden rounded-full border border-white/10 bg-white/5 shadow-xl ring-1 ring-white/5">
-                <!-- Bạn có thể xóa thẻ SVG này đi và thay bằng thẻ img: 
-                     <img src="/anh-chan-dung.jpg" alt="Tuan Dev" class="h-full w-full object-cover" /> 
-                -->
-                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="text-slate-400"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                <img src="../../assets/images/profile.jpg" alt="Tuan Dev" class="h-full w-full object-cover" /> 
               </div>
               <div class="flex flex-col items-start gap-3">
                 <span class="eyebrow">{{ siteContent.hero.eyebrow }}</span>
@@ -44,11 +40,7 @@
         </AnimateOnScroll>
 
         <AnimateOnScroll class="hero-visual relative flex flex-col items-center justify-center lg:justify-end">
-          <!-- TÙY CHỌN ẢNH ĐỨNG TỰ DO (XÓA PHÔNG) 
-               Khung bên phải giờ đây không bị giới hạn trong viền nữa.
-               Lời khuyên: Hãy chèn một ảnh chân dung hoặc toàn thân ĐÃ XÓA PHÔNG (.png) vào biến heroArtwork.
-               Ảnh sẽ hiển thị cực kỳ to, rõ ràng và có hiệu ứng đổ bóng hòa vào nền web.
-          -->
+          <!-- Hero artwork portrait -->
           <div class="relative w-full max-w-[480px]">
             <ParallaxElement :speed="-0.1">
               <img 
@@ -62,13 +54,13 @@
             <div class="glass-rule rounded-[1.25rem] p-4">
               <p class="mono-text text-xs uppercase tracking-[0.18em] text-slate-500">Approach</p>
               <p class="mt-3 text-sm leading-7 text-slate-300">
-                Less glow, clearer hierarchy, and UI surfaces that feel intentional instead of decorative.
+                {{ siteContent.hero.approachText }}
               </p>
             </div>
             <div class="glass-rule rounded-[1.25rem] p-4">
-              <p class="mono-text text-xs uppercase tracking-[0.18em] text-slate-500">Content strategy</p>
+              <p class="mono-text text-xs uppercase tracking-[0.18em] text-slate-500">Tech Stack</p>
               <p class="mt-3 text-sm leading-7 text-slate-300">
-                Real channels stay live. Missing proof stays marked as TODO instead of pretending to exist.
+                {{ siteContent.hero.techStackText }}
               </p>
             </div>
           </div>

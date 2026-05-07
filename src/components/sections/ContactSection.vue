@@ -49,8 +49,8 @@
                   </div>
                 </div>
 
-                <span class="status-pill" :class="channel.href ? 'status-pill--case-study' : 'status-pill--todo'">
-                  {{ channel.href ? 'live' : 'todo' }}
+                <span v-if="channel.href" class="status-pill status-pill--case-study">
+                  live
                 </span>
               </div>
             </SpotlightCard>
